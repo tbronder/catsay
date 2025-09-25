@@ -9,6 +9,8 @@ gem "sinatra"
 # We need a web server
 gem "puma"
 
+gem "rackup"
+
 # Foreman is used to run the app locally
 gem "foreman"
 
