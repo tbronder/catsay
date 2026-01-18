@@ -1,0 +1,48 @@
+# dx/build
+
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+
+DIRNAME=$(dirname -- "${0}") # => dx
+SCRIPT_DIR=$(cd -- "${DIRNAME}" > /dev/null 2>&1 && pwd)
+. "${SCRIPT_DIR}"/shared.lib.sh
+. "${SCRIPT_DIR}"/docker-compose.env
+
+usage() {
+    echo "usage: $0 [-h]"
+    echo ""
+    echo "Builds the development Docker image from Dockerfile.dev"
+    echo ""
+    echo "Options:"
+    echo "  -h - show this help message"
+} # usage
+
+while getopts ":h" opt "${@}"; do
+  case ${opt} in
+    h)
+      usage
+      exit 0
+      ;;
+    ?)
+      echo "Invalid option: ${OPTARG}"
+      usage
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+check_for_docker
+
+IMAGE=catsay-dev:debian-12.1
+
+log "Building Docker image '${IMAGE}'"
+docker build \
+  --quiet \
+  --file "${ROOT_DIR}/Dockerfile.dev" \
+  --tag "${IMAGE}" \
+  "${ROOT_DIR}"
+
+log "Docker image '${IMAGE}' built successfully."

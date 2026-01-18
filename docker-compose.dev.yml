@@ -2,7 +2,7 @@
 
 services:
   app:
-    image: catsay-dev:debian-12.1
+    image: ${IMAGE}
     init: true
     volumes:
       - type: bind
